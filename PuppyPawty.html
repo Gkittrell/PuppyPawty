@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PuppyPawty Treats — Joy in Every Bite</title>
+  <meta name="description" content="PuppyPawty: Vegan, minimal-ingredient dog treats. An immersive, playful experience with animated backgrounds, paw cursor, and a gallery space." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --orange: #FF7A3D;
+      --orange-2: #FFA66E;
+      --blue: #2A6FFF;
+      --blue-2: #4FB3FF;
+      --green: #7AD7A7;
+      --green-2: #C9F7D7;
+      --ink: #0b1726;
+      --bg-ink: #07111e;
+      --card: #0f1d33cc;
+      --muted: #a9c0e6;
+      --ring: #ffffffaa;
+      --white: #ffffff;
+      --shadow: 0 10px 40px rgba(0,0,0,.25);
+      --radius: 18px;
+    }
+
+    /* Global reset & base */
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+      color: var(--white);
+      background: radial-gradient(1200px 800px at 10% -10%, #142746 10%, #0a162b 50%, #060d1c 100%);
+      min-height:100svh;
+      overflow-x:hidden;
+      /* Animated dreamy gradient layer */
+      --g1: #0a1e40; --g2: #0d274f; --g3:#0a1b35; --g4:#0c2244;
+      background-image:
+        radial-gradient(1200px 800px at 10% -10%, var(--g2) 0%, transparent 60%),
+        radial-gradient(900px 600px at 110% 10%, var(--g1) 0%, transparent 70%),
+        radial-gradient(1400px 900px at 50% 120%, var(--g3) 0%, transparent 70%),
+        radial-gradient(800px 600px at -10% 110%, var(--g4) 0%, transparent 70%),
+        linear-gradient(180deg, #081326 0%, #051021 100%);
+      background-blend-mode: screen, screen, screen, screen, normal;
+      position: relative;
+      isolation:isolate;
+      line-height:1.5;
+      cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 36 36'><g fill='%23FF7A3D'><circle cx='9' cy='7' r='5'/><circle cx='17' cy='5' r='5'/><circle cx='26' cy='8' r='5'/><circle cx='8' cy='16' r='5'/><path d='M12 19c4-3 10-3 14 1c3 3 3 8 0 11c-3 3-8 3-11 0c-4-4-4-10-3-12z'/></g></svg>") 6 6, auto;
+    }
+
+    /* Subtle floating paw particles */
+    .paws {
+      position: fixed; inset:0; pointer-events:none; z-index:-1; opacity:.25; filter: drop-shadow(0 2px 4px rgba(0,0,0,.25));
+      background-image:
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 36 36'><g fill='%234FB3FF' opacity='0.65'><circle cx='9' cy='7' r='4'/><circle cx='17' cy='5' r='4'/><circle cx='26' cy='8' r='4'/><circle cx='8' cy='16' r='4'/><path d='M12 19c4-3 10-3 14 1c3 3 3 8 0 11c-3 3-8 3-11 0c-4-4-4-10-3-12z'/></g></svg>");
+      background-size: 48px 48px, 48px 48px;
+      background-repeat: repeat;
+      mask-image: radial-gradient(200% 200% at 50% 50%, #000 25%, transparent 60%);
+      animation: drift 40s linear infinite;
+    }
+    @keyframes drift{from{background-position:0 0}to{background-position:600px 800px}}
+
+    /* Glimmer grid overlay for depth */
+    .glimmer { position: fixed; inset:0; pointer-events:none; z-index:-1; mix-blend-mode: screen; opacity:.35;
+      background-image:
+        radial-gradient(circle at 10% 10%, var(--blue) 0 2px, transparent 3px),
+        radial-gradient(circle at 90% 20%, var(--green) 0 2px, transparent 3px),
+        radial-gradient(circle at 30% 80%, var(--orange) 0 2px, transparent 3px);
+      background-size: 220px 220px, 280px 280px, 320px 320px;
+      animation: shimmer 12s ease-in-out infinite alternate;
+    }
+    @keyframes shimmer{from{filter:hue-rotate(0deg)}to{filter:hue-rotate(25deg)}}
+
+    a{color:var(--blue-2); text-decoration: none}
+    img{max-width:100%; display:block}
+    .container{width:min(1200px, 92%); margin-inline:auto}
+
+    /* Header */
+    header{position: sticky; top:0; z-index:50; backdrop-filter: blur(12px); background:linear-gradient(180deg, #0a182fdd, #0a182f66); border-bottom:1px solid #ffffff1a}
+    .nav{display:flex; align-items:center; justify-content:space-between; padding:14px 0}
+    .brand{display:flex; align-items:center; gap:12px}
+    .brand .logo{width:42px; height:42px; border-radius:12px; background: conic-gradient(from 180deg at 50% 50%, var(--orange), var(--blue), var(--green), var(--orange)); box-shadow: var(--shadow); position:relative}
+    .brand .logo::after{content:"🐶"; position:absolute; inset:0; display:grid; place-items:center; font-size:24px}
+    .brand h1{font-family:'Nunito', sans-serif; font-weight:900; letter-spacing:.5px; margin:0; font-size:1.1rem}
+    .pill{padding:10px 14px; border-radius:999px; border:1px solid #ffffff26; background: #0d1f3acc; box-shadow: inset 0 0 0 1px #ffffff12}
+    .nav a{padding:.6rem .9rem; border-radius:12px}
+    .nav a:hover{background:#ffffff12}
+    .cta{background:linear-gradient(135deg,var(--orange),var(--blue)); color:var(--white); font-weight:700; border:none}
+
+    /* Hero */
+    .hero{position:relative; padding: clamp(48px, 7vw, 96px) 0 56px}
+    .hero-grid{display:grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items:center}
+    .badge{display:inline-flex; align-items:center; gap:10px; padding:7px 12px; border-radius:999px; background:#ffffff12; border:1px solid #ffffff26; font-size:.9rem}
+    .badge .dot{width:10px;height:10px;border-radius:50%;background:conic-gradient(var(--green), var(--blue), var(--orange))}
+    .hero h2{font-size:clamp(2rem, 4vw, 3.4rem); line-height:1.1; margin:.8rem 0 .6rem; font-weight:800}
+    .hero p{color:var(--muted); font-size:1.05rem}
+    .actions{display:flex; gap:12px; margin-top:22px}
+    .btn{display:inline-flex; align-items:center; gap:10px; padding:12px 16px; border-radius:14px; border:1px solid #ffffff26; background:#0a1934; color:#e9f2ff; font-weight:700; box-shadow: var(--shadow); transition:.2s}
+    .btn:hover{transform: translateY(-2px); box-shadow: 0 14px 50px rgba(0,0,0,.35)}
+    .btn.primary{background: linear-gradient(135deg, var(--orange), var(--blue)); border:none}
+    .statbar{display:grid; grid-template-columns: repeat(3, 1fr); gap:16px; margin-top:24px}
+    .stat{background: #0b1a33; border:1px solid #ffffff1c; border-radius:14px; padding:14px; text-align:center}
+    .stat .k{font-weight:800; font-size:1.4rem}
+    .hero-visual{position:relative}
+    .card3d{position:relative; border-radius:22px; padding:18px; background:linear-gradient(180deg, #10203d, #0b172e); border:1px solid #ffffff1f; box-shadow: var(--shadow); transform: perspective(900px) rotateX(8deg) rotateY(-8deg); transform-style:preserve-3d; transition: transform .2s ease}
+    .card3d:hover{transform: perspective(900px) rotateX(4deg) rotateY(-2deg)}
+    .ribbon{position:absolute; top:14px; right:-10px; background:linear-gradient(180deg,var(--green), var(--blue)); padding:10px 16px; border-radius: 12px; font-weight:800; box-shadow: var(--shadow)}
+    .wave{position:absolute; left:0; right:0; bottom:-1px; height:90px; background: radial-gradient(60% 120% at 50% -20%, #ffffff22 0,#ffffff00 70%), linear-gradient(180deg, #0a172d00 0, #061126 50%, #051021 100%); mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="white" d="M0,64L60,96C120,128,240,192,360,192C480,192,600,128,720,90.7C840,53,960,43,1080,64C1200,85,1320,139,1380,165.3L1440,192L1440,0L0,0Z"/></svg>') bottom / cover no-repeat}
+
+    /* Features */
+    .features{padding:72px 0}
+    .grid{display:grid; grid-template-columns: repeat(3, 1fr); gap:18px}
+    .card{background: var(--card); border:1px solid #ffffff1c; border-radius: var(--radius); padding:18px; box-shadow: var(--shadow)}
+    .card h3{margin:.2rem 0 .4rem}
+    .card p{color:#cde0ff}
+
+    /* Products */
+    .products{padding:60px 0}
+    .products h2{margin:0 0 10px}
+    .prod-grid{display:grid; grid-template-columns: repeat(4, 1fr); gap:18px}
+    .prod{background: linear-gradient(180deg, #0e203d, #09162b); border:1px solid #ffffff1a; border-radius:20px; padding:14px; position:relative; overflow:hidden}
+    .prod .tag{position:absolute; top:12px; left:12px; background:linear-gradient(135deg,var(--blue), var(--green)); padding:6px 10px; border-radius:999px; font-size:.8rem; font-weight:800}
+    .prod .img{height:160px; background: radial-gradient(120px 80px at 50% 60%, #153463, #0f2648); border-radius:16px; display:grid; place-items:center; margin-bottom:10px}
+    .prod .img span{font-size:44px}
+    .price{font-weight:800; font-size:1.2rem}
+    .add{margin-top:8px}
+
+    /* Cart */
+    .cart{position:fixed; right:18px; bottom:18px; background:#0f1f39e6; border:1px solid #ffffff26; border-radius:18px; padding:12px 16px; box-shadow: var(--shadow); display:flex; align-items:center; gap:10px}
+    .cart .count{background:var(--orange); color:#111; font-weight:900; padding:6px 10px; border-radius:999px}
+
+    /* Gallery */
+    .gallery{padding:72px 0}
+    .upload{display:grid; gap:12px; grid-template-columns: 1fr auto; align-items:center}
+    .dropzone{border:2px dashed #ffffff33; border-radius:18px; padding:20px; text-align:center; background:#0b1a33; cursor:pointer}
+    .grid-gallery{display:grid; grid-template-columns: repeat(4, 1fr); gap:12px; margin-top:18px}
+    .grid-gallery .ph{aspect-ratio:1/1; border-radius:16px; background: radial-gradient(60% 60% at 50% 50%, #16335f, #0b1a33); border:1px solid #ffffff1c; display:grid; place-items:center; color:#a9c0e6}
+
+    /* Testimonials */
+    .testimonials{padding:60px 0}
+    .carousel{position:relative; overflow:hidden; border-radius:20px; border:1px solid #ffffff1a; background:#0c1a33}
+    .track{display:flex; transition: transform .6s ease}
+    .slide{flex:0 0 100%; padding:28px}
+    .dots{display:flex; justify-content:center; gap:8px; margin-top:12px}
+    .dot{width:10px;height:10px;border-radius:999px;background:#2b4270; border:1px solid #ffffff30}
+    .dot.active{background: linear-gradient(135deg, var(--orange), var(--blue))}
+
+    /* FAQ */
+    .faq{padding:60px 0}
+    details{background: #0b1a33; border:1px solid #ffffff1c; border-radius:14px; padding:14px}
+    summary{cursor:pointer; font-weight:700}
+    details + details{margin-top:10px}
+
+    /* Contact */
+    .contact{padding:60px 0}
+    .form{display:grid; grid-template-columns: 1fr 1fr; gap:12px}
+    .form input, .form textarea{width:100%; padding:12px 14px; border-radius:12px; background:#0a1831; border:1px solid #ffffff2a; color:#e9f2ff}
+    .form textarea{grid-column: span 2; min-height:120px}
+
+    /* Footer */
+    footer{padding:40px 0; color:#b7c9eb; border-top:1px dashed #ffffff2a}
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .hero-grid{grid-template-columns: 1fr}
+      .grid{grid-template-columns: 1fr 1fr}
+      .prod-grid{grid-template-columns: 1fr 1fr}
+      .grid-gallery{grid-template-columns: 1fr 1fr}
+      .form{grid-template-columns: 1fr}
+    }
+    @media (max-width: 560px){
+      .grid{grid-template-columns: 1fr}
+      .prod-grid{grid-template-columns: 1fr}
+      .grid-gallery{grid-template-columns: 1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="paws" aria-hidden="true"></div>
+  <div class="glimmer" aria-hidden="true"></div>
+
+  <header>
+    <nav class="nav container">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <h1>PuppyPawty Treats</h1>
+      </div>
+      <div class="pill">
+        <a href="#products">Shop</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact" class="cta">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <div class="hero-grid">
+        <div>
+          <div class="badge"><span class="dot"></span> Vegan • Minimal Ingredients • Vet-Friendly</div>
+          <h2>Joy in Every Bite — Healthy, Vegan Treats for Happy Tails</h2>
+          <p>We craft <strong>minimal-ingredient</strong> goodies with love: pumpkin, blueberry, peanut butter, and more. No fillers, no fluff — just tail-wagging flavor.
+          </p>
+          <div class="actions">
+            <a href="#products" class="btn primary">🐾 Shop Now</a>
+            <a href="#story" class="btn">Our Story</a>
+          </div>
+          <div class="statbar">
+            <div class="stat"><div class="k">100% Vegan</div><small>earth-friendly recipes</small></div>
+            <div class="stat"><div class="k">5★ Rated</div><small>by happy pet parents</small></div>
+            <div class="stat"><div class="k">3–5</div><small>ingredients per treat</small></div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="card3d">
+            <div class="ribbon">New Flavors</div>
+            <img src="puppypic.webp" alt="Happy dog with treats" style="border-radius:14px"/>
+            <div style="display:flex; gap:10px; margin-top:12px">
+              <span class="pill">Pumpkin</span>
+              <span class="pill">Blueberry</span>
+              <span class="pill">PB+Banana</span>
+            </div>
+          </div>
+          <div class="wave" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="story" class="features container">
+      <div class="grid">
+        <article class="card">
+          <h3>Minimal Ingredients</h3>
+          <p>Clean labels you can pronounce. Each recipe uses just a handful of wholesome, plant-based ingredients.</p>
+        </article>
+        <article class="card">
+          <h3>Sustainably Made</h3>
+          <p>We source responsibly and bake in small batches to reduce waste and maximize taste.</p>
+        </article>
+        <article class="card">
+          <h3>Picky-Pup Approved</h3>
+          <p>Real dogs (and their humans) help us taste-test every batch for maximum tail wags.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="products" class="products container">
+      <h2>Featured Treats</h2>
+      <p class="muted">Click <em>Add to Cart</em> to see the floating cart update.</p>
+      <div class="prod-grid" id="prodGrid">
+        <!-- Products are injected by JS for easy editing -->
+      </div>
+    </section>
+
+    <section id="gallery" class="gallery container">
+      <h2>Community Gallery</h2>
+      <p>Add your own photos of dogs enjoying PuppyPawty treats. Drag & drop or use the picker!</p>
+      <div class="upload">
+        <label class="dropzone" id="dropzone">
+          <input id="fileInput" type="file" accept="image/*" multiple hidden>
+          <strong>📸 Drop images here</strong><br>
+          <small>or click to upload</small>
+        </label>
+        <button id="clearGallery" class="btn" type="button">Clear</button>
+      </div>
+      <div class="grid-gallery" id="galleryGrid">
+        <!-- Your images will appear here -->
+        <div class="ph">Your adorable pup goes here 🐶</div>
+        <div class="ph">Nom nom gallery 🍪</div>
+        <div class="ph">Action shots welcome ⚡</div>
+        <div class="ph">Happy tails only 💚</div>
+      </div>
+    </section>
+
+    <section class="testimonials container">
+      <h2>Happy Tails</h2>
+      <div class="carousel" id="carousel">
+        <div class="track" id="track">
+          <div class="slide">
+            <p>“My senior pup has a sensitive tummy — these are the first treats that don’t upset it. Instant tail wags!”</p>
+            <strong>— Maya &amp; Poppy</strong>
+          </div>
+          <div class="slide">
+            <p>“Crunchy, clean, and my husky sits before I even open the bag. 10/10 would recommend!”</p>
+            <strong>— Luis &amp; Koda</strong>
+          </div>
+          <div class="slide">
+            <p>“The blueberry ones smell so good I almost tried one. (I did. Not bad!)”</p>
+            <strong>— Jess &amp; Noodle</strong>
+          </div>
+        </div>
+      </div>
+      <div class="dots" id="dots" aria-label="testimonial pagination"></div>
+    </section>
+
+    <section id="faq" class="faq container">
+      <h2>FAQ</h2>
+      <details>
+        <summary>Are all treats vegan and gluten-free?</summary>
+        <p>Yes — 100% vegan. Gluten content depends on the specific recipe; oat-based options are available.</p>
+      </details>
+      <details>
+        <summary>How many ingredients are in each recipe?</summary>
+        <p>Usually 3–5 whole-food ingredients. That’s it.</p>
+      </details>
+      <details>
+        <summary>Do you ship nationwide?</summary>
+        <p>Yep! We ship across the U.S., with sustainable packaging.</p>
+      </details>
+    </section>
+
+    <section id="contact" class="contact container">
+      <h2>Contact & Newsletter</h2>
+      <form class="form" onsubmit="event.preventDefault(); toast('Thanks! You’re on the list.'); this.reset();">
+        <input type="text" placeholder="Your name" required>
+        <input type="email" placeholder="Email address" required>
+        <textarea placeholder="Message (optional)"></textarea>
+        <button class="btn primary" type="submit">Subscribe</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="container">
+    <small>© <span id="year"></span> PuppyPawty Treats • Vegan • Minimal Ingredients • Made with 💚</small>
+  </footer>
+
+  <!-- Floating Cart -->
+  <div class="cart" id="cart" aria-live="polite" title="Your cart">
+    <span>🛒</span>
+    <span class="count" id="cartCount">0</span>
+    <span>items</span>
+  </div>
+
+  <script>
+    // Utility: toast message
+    function toast(msg){
+      const t = document.createElement('div');
+      t.textContent = msg;
+      Object.assign(t.style,{
+        position:'fixed',left:'50%',top:'28px',transform:'translateX(-50%)',
+        background:'linear-gradient(135deg, var(--orange), var(--blue))',
+        padding:'12px 16px',borderRadius:'14px',fontWeight:'800',
+        color:'#111',zIndex:9999,boxShadow:'var(--shadow)',
+        border:'1px solid var(--ring)'
+      });
+      document.body.appendChild(t);
+      setTimeout(()=>{t.style.transition='opacity .4s'; t.style.opacity=0;},1400);
+      setTimeout(()=>t.remove(), 1900);
+    }
+
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Product data (edit freely!)
+    const products = [
+      {id:'pkm', name:'Pumpkin Crunch', price:10.99, tag:'Best Seller', emoji:'🎃'},
+      {id:'bby', name:'Blueberry Burst', price:11.49, tag:'Antioxidant', emoji:'🫐'},
+      {id:'pbb', name:'PB + Banana Bites', price:9.99, tag:'Training', emoji:'🥜'},
+      {id:'spn', name:'Spinach & Apple', price:10.49, tag:'Greens', emoji:'🍏'},
+      {id:'swt', name:'Sweet Potato Stars', price:10.99, tag:'Limited', emoji:'⭐'},
+      {id:'crb', name:'Carob Cookies', price:12.49, tag:'Cocoa-free', emoji:'🍪'},
+      {id:'mnt', name:'Minty Fresh Breath', price:11.99, tag:'Fresh', emoji:'🌿'},
+      {id:'ckt', name:'Coconut Crunchers', price:10.79, tag:'Fiber', emoji:'🥥'},
+    ];
+
+    // Render products
+    const grid = document.getElementById('prodGrid');
+    grid.innerHTML = products.map(p=>`
+      <article class="prod">
+        <div class="tag">${p.tag}</div>
+        <div class="img"><span>${p.emoji}</span></div>
+        <h3>${p.name}</h3>
+        <div class="price">$${p.price.toFixed(2)}</div>
+        <button class="btn add" data-id="${p.id}">Add to Cart</button>
+      </article>
+    `).join('');
+
+    // Cart logic
+    let cartCount = 0;
+    const cartEl = document.getElementById('cart');
+    const countEl = document.getElementById('cartCount');
+    grid.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.add');
+      if(!btn) return;
+      cartCount++;
+      countEl.textContent = cartCount;
+      cartEl.animate([
+        { transform: 'translateY(0)' },
+        { transform: 'translateY(-6px)' },
+        { transform: 'translateY(0)' }
+      ], { duration: 300, easing: 'ease-out' });
+      toast('Added to cart!');
+    });
+
+    // Testimonials carousel
+    const track = document.getElementById('track');
+    const slides = Array.from(track.children);
+    const dotsWrap = document.getElementById('dots');
+    let idx = 0;
+    slides.forEach((_, i)=>{
+      const d = document.createElement('button');
+      d.className = 'dot' + (i===0?' active':'');
+      d.addEventListener('click', ()=>go(i,true));
+      dotsWrap.appendChild(d);
+    });
+    const dots = Array.from(dotsWrap.children);
+    function go(i, manual){
+      idx = (i+slides.length) % slides.length;
+      track.style.transform = `translateX(-${idx*100}%)`;
+      dots.forEach((d,di)=>d.classList.toggle('active', di===idx));
+      if(manual){ restart(); }
+    }
+    let timer = setInterval(()=>go(idx+1,false), 4000);
+    function restart(){ clearInterval(timer); timer = setInterval(()=>go(idx+1,false), 4000); }
+
+    // Gallery uploader (drag & drop + click)
+    const dz = document.getElementById('dropzone');
+    const input = document.getElementById('fileInput');
+    const gridGallery = document.getElementById('galleryGrid');
+    const clearBtn = document.getElementById('clearGallery');
+
+    function addImages(files){
+      Array.from(files).forEach(file=>{
+        if(!file.type.startsWith('image/')) return;
+        const reader = new FileReader();
+        reader.onload = ()=>{
+          const img = new Image();
+          img.src = reader.result;
+          const wrap = document.createElement('div');
+          wrap.style.aspectRatio = '1/1';
+          wrap.style.borderRadius = '16px';
+          wrap.style.overflow = 'hidden';
+          wrap.style.border = '1px solid #ffffff1c';
+          wrap.appendChild(img);
+          gridGallery.appendChild(wrap);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    dz.addEventListener('click', ()=>input.click());
+    input.addEventListener('change', e=> addImages(e.target.files));
+
+    dz.addEventListener('dragover', e=>{ e.preventDefault(); dz.style.borderColor = 'var(--blue-2)'; });
+    dz.addEventListener('dragleave', ()=>{ dz.style.borderColor = '#ffffff33'; });
+    dz.addEventListener('drop', e=>{ e.preventDefault(); dz.style.borderColor = '#ffffff33'; addImages(e.dataTransfer.files); });
+
+    clearBtn.addEventListener('click', ()=>{
+      gridGallery.innerHTML = `<div class="ph">Your adorable pup goes here 🐶</div>
+        <div class="ph">Nom nom gallery 🍪</div>
+        <div class="ph">Action shots welcome ⚡</div>
+        <div class="ph">Happy tails only 💚</div>`;
+    });
+
+    // Scroll reveal animations (simple)
+    const observer = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          e.target.animate([
+            { opacity:0, transform:'translateY(16px)' },
+            { opacity:1, transform:'translateY(0)' }
+          ], { duration: 500, easing: 'ease-out', fill:'forwards' });
+          observer.unobserve(e.target);
+        }
+      })
+    }, { threshold: .1 });
+    document.querySelectorAll('.card, .prod, .hero-grid > div, .testimonials, .faq details, .contact .form').forEach(el=>observer.observe(el));
+
+    // Smooth anchor scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        const id = a.getAttribute('href').slice(1);
+        const el = document.getElementById(id);
+        if(el){ e.preventDefault(); el.scrollIntoView({ behavior:'smooth', block:'start' }); }
+      });
+    });
+  </script>
+</body>
+</html>
